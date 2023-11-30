@@ -1,0 +1,303 @@
+type EventsSummary {
+  id: ID!
+  approval: [Approval!]! @derivedFrom(field: "eventsSummary")
+  approvalsCount: BigInt!
+  approvalForAll: [ApprovalForAll!]! @derivedFrom(field: "eventsSummary")
+  approvalForAllsCount: BigInt!
+  collect: [Collect!]! @derivedFrom(field: "eventsSummary")
+  collectsCount: BigInt!
+  decreaseLiquidity: [DecreaseLiquidity!]! @derivedFrom(field: "eventsSummary")
+  decreaseLiquiditysCount: BigInt!
+  increaseLiquidity: [IncreaseLiquidity!]! @derivedFrom(field: "eventsSummary")
+  increaseLiquiditysCount: BigInt!
+  transfer: [Transfer!]! @derivedFrom(field: "eventsSummary")
+  transfersCount: BigInt!
+  burn: [Burn!]! @derivedFrom(field: "eventsSummary")
+  burnsCount: BigInt!
+  collectProtocol: [CollectProtocol!]! @derivedFrom(field: "eventsSummary")
+  collectProtocolsCount: BigInt!
+  flash: [Flash!]! @derivedFrom(field: "eventsSummary")
+  flashsCount: BigInt!
+  increaseObservationCardinalityNext: [IncreaseObservationCardinalityNext!]! @derivedFrom(field: "eventsSummary")
+  increaseObservationCardinalityNextsCount: BigInt!
+  initialize: [Initialize!]! @derivedFrom(field: "eventsSummary")
+  initializesCount: BigInt!
+  mint: [Mint!]! @derivedFrom(field: "eventsSummary")
+  mintsCount: BigInt!
+  setFeeProtocol: [SetFeeProtocol!]! @derivedFrom(field: "eventsSummary")
+  setFeeProtocolsCount: BigInt!
+  setLmPoolEvent: [SetLmPoolEvent!]! @derivedFrom(field: "eventsSummary")
+  setLmPoolEventsCount: BigInt!
+  swap: [Swap!]! @derivedFrom(field: "eventsSummary")
+  swapsCount: BigInt!
+  poolCreated: [PoolCreated!]! @derivedFrom(field: "eventsSummary")
+  poolCreatedsCount: BigInt!
+  feeAmountEnabled: [FeeAmountEnabled!]! @derivedFrom(field: "eventsSummary")
+  feeAmountEnabledsCount: BigInt!
+  feeAmountExtraInfoUpdated: [FeeAmountExtraInfoUpdated!]! @derivedFrom(field: "eventsSummary")
+  feeAmountExtraInfoUpdatedsCount: BigInt!
+  ownerChanged: [OwnerChanged!]! @derivedFrom(field: "eventsSummary")
+  ownerChangedsCount: BigInt! 
+  whiteListAdded: [WhiteListAdded!]! @derivedFrom(field: "eventsSummary")
+  whiteListAddedsCount: BigInt!
+  totalSwapCount: BigInt!
+}
+type Pool {
+  id: String!
+  name: String!
+  symbol: String!
+  tick: BigInt!
+  cumulativeVolumeByTokenAmount: [BigInt!]!
+  cumulativeSwapCount: Int!
+  lastUpdateTimestamp: BigInt!
+  lastUpdateBlockNumber: BigInt!
+  swaps: [Swap!]! @derivedFrom(field: "pool")
+
+  " Token0 of the liquidity pool "
+  token0: String!
+
+  " Token1 of the liquidity pool "
+  token1: String!
+}
+
+
+type Approval {
+  id: ID!
+  owner: String!
+  approved: String!
+  tokenId: BigInt!
+  eventsSummary: String!
+}
+
+type ApprovalForAll {
+  id: ID!
+  owner: String!
+  operator: String!
+  approved: Boolean!
+  eventsSummary: String!
+}
+
+type Collect {
+  id: ID!
+  tokenId: BigInt!
+  recipient: String!
+  amount0: BigInt!
+  amount1: BigInt!
+  eventsSummary: String!
+}
+
+type DecreaseLiquidity {
+  id: ID!
+  tokenId: BigInt!
+  liquidity: BigInt!
+  amount0: BigInt!
+  amount1: BigInt!
+  eventsSummary: String!
+}
+
+type IncreaseLiquidity {
+  id: ID!
+  tokenId: BigInt!
+  liquidity: BigInt!
+  amount0: BigInt!
+  amount1: BigInt!
+  eventsSummary: String!
+}
+
+type Transfer {
+  id: ID!
+  from: String!
+  to: String!
+  tokenId: BigInt!
+  eventsSummary: String!
+
+  toBalance: BigInt!
+}
+
+type TokenBalance {
+  id: ID!
+  address: Bytes! # Assuming address is of type Bytes
+  tokenId: BigInt!
+  balance: Int!
+}
+
+type TokenSwapBalance {
+  id: ID!
+  address: Bytes! # Assuming address is of type Bytes
+  tokenId: String!
+  balance: BigInt!
+}
+
+type DailySwapSummary {
+  id: ID!
+  date: String!
+  cumulativeValue: BigInt!
+  totalSwapAmount: BigInt!  # Add this field in your schema
+  totalSwapCount: Int!      # Add this field in your schema
+}
+
+
+
+
+# amount of each ctoken that a liquidator has won (seized)
+type AmountGain @entity {
+  # concat of address liquidatoraccount and address cTokenCollateral
+  id: ID!
+  # address of ctoken seized
+  token: Token!
+  # liquidator
+
+  # amount won (seized) of cTokenCollateral by this liquidatoraccount
+  amountWon: BigInt!
+}
+
+type Token @entity {
+  # address of the ctoken
+  id: ID!
+  decimals: BigInt!
+  # list of accounts that have had this ctoken seized
+  
+  # list of accounts that have seized this ctoken
+
+}
+
+# amount of each ctoken that a liquidated account has lost (had seized)
+type AmountLoss @entity {
+  # concat of address borrower and address cTokenCollateral
+  id: ID!
+  # address of ctoken seized
+   token: Token!
+  # liquidatedaccount
+
+  # amount lost (seized) of cTokenCollateral by this account
+  amountLost: BigInt!
+}
+type FeeAmountEnabled {
+  id: ID!
+  fee: BigInt!
+  tickSpacing: BigInt!
+  eventsSummary: String!
+}
+
+type FeeAmountExtraInfoUpdated {
+  id: ID!
+  fee: BigInt!
+  whitelistRequested: Boolean!
+  enabled: Boolean!
+  eventsSummary: String!
+}
+
+type OwnerChanged {
+  id: ID!
+  oldOwner: String!
+  newOwner: String!
+  eventsSummary: String!
+}
+
+
+
+type WhiteListAdded {
+  id: ID!
+  user: String!
+  verified: Boolean!
+  eventsSummary: String!
+}
+
+type PoolCreated {
+  id: ID!
+  token0: String!
+  token1: String!
+  fee: BigInt!
+  tickSpacing: BigInt!
+  pool: String!
+  eventsSummary: String!
+}
+
+type Burn {
+  id: ID!
+  owner: String!
+  tickLower: BigInt!
+  tickUpper: BigInt!
+  amount: BigInt!
+  amount0: BigInt!
+  amount1: BigInt!
+  eventsSummary: String!
+}
+
+
+
+type CollectProtocol {
+  id: ID!
+  sender: String!
+  recipient: String!
+  amount0: BigInt!
+  amount1: BigInt!
+  eventsSummary: String!
+}
+
+type Flash {
+  id: ID!
+  sender: String!
+  recipient: String!
+  amount0: BigInt!
+  amount1: BigInt!
+  paid0: BigInt!
+  paid1: BigInt!
+  eventsSummary: String!
+}
+
+type IncreaseObservationCardinalityNext {
+  id: ID!
+  observationCardinalityNextOld: BigInt!
+  observationCardinalityNextNew: BigInt!
+  eventsSummary: String!
+}
+
+type Initialize {
+  id: ID!
+  sqrtPriceX96: BigInt!
+  tick: BigInt!
+  eventsSummary: String!
+}
+
+type Mint {
+  id: ID!
+  sender: String!
+  owner: String!
+  tickLower: BigInt!
+  tickUpper: BigInt!
+  amount: BigInt!
+  amount0: BigInt!
+  amount1: BigInt!
+  eventsSummary: String!
+}
+
+type SetFeeProtocol {
+  id: ID!
+  feeProtocol0Old: BigInt!
+  feeProtocol1Old: BigInt!
+  feeProtocol0New: BigInt!
+  feeProtocol1New: BigInt!
+  eventsSummary: String!
+}
+
+type SetLmPoolEvent {
+  id: ID!
+  addr: String!
+  eventsSummary: String!
+}
+
+type Swap {
+  id: ID!
+  sender: String!
+  recipient: String!
+  amount0: BigInt!
+  amount1: BigInt!
+  sqrtPriceX96: BigInt!
+  liquidity: BigInt!
+  tick: BigInt!
+  protocolFeesToken0: BigInt!
+  protocolFeesToken1: BigInt!
+  eventsSummary: String!
+  cumulativeVolumeByTokenAmount: [BigInt!]! 
+}

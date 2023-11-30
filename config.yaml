@@ -1,0 +1,96 @@
+name: My Envio Indexer
+networks:
+- id: 7332
+  rpc_config:
+    url: https://rpc.ankr.com/horizen_eon
+    unstable__sync_config:
+      initial_block_interval: 1000 # Integer
+      backoff_multiplicative: 0.4 # Float
+      acceleration_additive: 5000 # Integer
+      interval_ceiling: 2000 # Integer
+      backoff_millis: 50 # Integer
+      query_timeout_millis: 200000 # Integer
+  start_block: 600000
+  contracts:
+  - name: nftmanager
+    address:
+    - 0xc3E42C7E4fAF94F1DAdc2f3479FfEe9442b9db2C
+    handler: src/EventHandlers.ts
+    events:
+    - event: Approval(address indexed owner, address indexed approved, uint256 indexed tokenId)
+      requiredEntities:
+      - name: EventsSummary
+    - event: ApprovalForAll(address indexed owner, address indexed operator, bool approved)
+      requiredEntities:
+      - name: EventsSummary
+    - event: Collect(uint256 indexed tokenId, address recipient, uint256 amount0, uint256 amount1)
+      requiredEntities:
+      - name: EventsSummary
+    - event: DecreaseLiquidity(uint256 indexed tokenId, uint128 liquidity, uint256 amount0, uint256 amount1)
+      requiredEntities:
+      - name: EventsSummary
+    - event: IncreaseLiquidity(uint256 indexed tokenId, uint128 liquidity, uint256 amount0, uint256 amount1)
+      requiredEntities:
+      - name: EventsSummary
+    - event: Transfer(address indexed from, address indexed to, uint256 indexed tokenId)
+      requiredEntities:
+      - name: EventsSummary
+      - name: Pool
+      - name: TokenBalance    
+  - name: coreFactory
+    abi_file_path: null
+    address:
+    - 0x4bC187E010A0732A4299cc8Bc9f6e889795eBc06
+    handler: src/EventHandlers.ts
+    events:
+    - event: FeeAmountEnabled(uint24 indexed fee, int24 indexed tickSpacing)
+      requiredEntities:
+      - name: EventsSummary
+    - event: FeeAmountExtraInfoUpdated(uint24 indexed fee, bool whitelistRequested, bool enabled)
+      requiredEntities:
+      - name: EventsSummary
+    - event: OwnerChanged(address indexed oldOwner, address indexed newOwner)
+      requiredEntities:
+      - name: EventsSummary   
+    - event: WhiteListAdded(address indexed user, bool verified)
+      requiredEntities:
+      - name: EventsSummary    
+    - event: PoolCreated(address indexed token0, address indexed token1, uint24 indexed fee, int24 tickSpacing, address pool)
+      requiredEntities: []  
+  - name: pool
+    handler: src/EventHandlers.ts
+    events:
+    - event: Burn(address indexed owner, int24 indexed tickLower, int24 indexed tickUpper, uint128 amount, uint256 amount0, uint256 amount1)
+      requiredEntities:
+      - name: EventsSummary
+    - event: Collect(address indexed owner, address recipient, int24 indexed tickLower, int24 indexed tickUpper, uint128 amount0, uint128 amount1)
+      requiredEntities:
+      - name: EventsSummary
+    - event: CollectProtocol(address indexed sender, address indexed recipient, uint128 amount0, uint128 amount1)
+      requiredEntities:
+      - name: EventsSummary
+    - event: Flash(address indexed sender, address indexed recipient, uint256 amount0, uint256 amount1, uint256 paid0, uint256 paid1)
+      requiredEntities:
+      - name: EventsSummary
+    - event: IncreaseObservationCardinalityNext(uint16 observationCardinalityNextOld, uint16 observationCardinalityNextNew)
+      requiredEntities:
+      - name: EventsSummary
+    - event: Initialize(uint160 sqrtPriceX96, int24 tick)
+      requiredEntities:
+      - name: EventsSummary
+    - event: Mint(address sender, address indexed owner, int24 indexed tickLower, int24 indexed tickUpper, uint128 amount, uint256 amount0, uint256 amount1)
+      requiredEntities:
+      - name: EventsSummary
+    - event: SetFeeProtocol(uint32 feeProtocol0Old, uint32 feeProtocol1Old, uint32 feeProtocol0New, uint32 feeProtocol1New)
+      requiredEntities:
+      - name: EventsSummary
+    - event: SetLmPoolEvent(address addr)
+      requiredEntities:
+      - name: EventsSummary
+    - event: Swap(address indexed sender, address indexed recipient, int256 amount0, int256 amount1, uint160 sqrtPriceX96, uint128 liquidity, int24 tick, uint128 protocolFeesToken0, uint128 protocolFeesToken1)
+      requiredEntities:   
+      - name: Swap    
+      - name: DailySwapSummary
+      - name: Pool
+      - name: TokenSwapBalance
+
